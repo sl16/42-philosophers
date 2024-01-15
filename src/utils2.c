@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:02:52 by vbartos           #+#    #+#             */
-/*   Updated: 2023/11/17 23:45:08 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:30:26 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	ft_only_one(t_data *data)
 	if (pthread_create(&data->threads[0], NULL,
 			&ft_philosopher, &data->philos[0]))
 		ft_exit_error("Failed to create thread.", data);
-	// pthread_detach(data->threads[0]);
 	while (get_death_flag(data) != 1)
 		ft_usleep(1);
 	pthread_join(data->threads[0], NULL);
@@ -79,4 +78,15 @@ int	ft_free_all(t_data *data)
 	if (data->forks)
 		free(data->forks);
 	return (0);
+}
+
+// ft_generate_thread
+// - creates a philo thread;
+// - separated from ft_threads for norminette reasons;
+void	ft_generate_thread(t_data *data, int i)
+{
+	if (pthread_create(&data->threads[i], NULL,
+			&ft_philosopher, &data->philos[i]))
+		ft_exit_error("Failed to create thread.", data);
+	ft_usleep(1);
 }

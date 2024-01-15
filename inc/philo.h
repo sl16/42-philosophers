@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 15:40:28 by vbartos           #+#    #+#             */
-/*   Updated: 2023/11/17 23:45:59 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:27:58 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,13 @@ int			ft_init_philos(t_data *data);
 int			ft_init_forks(t_data *data);
 
 int			ft_threads(t_data *data);
+void		ft_generate_thread(t_data *data, int i);
 void		*ft_philosopher(void *philo_ptr);
 void		ft_routine(t_philo *philo);
 void		*ft_philo_check(void *philo_ptr);
 void		*ft_round_check(void *data_ptr);
 int			ft_only_one(t_data *data);
 void		ft_routine_only_one(t_philo *philo);
-
-
 int			get_eating_flag(t_philo *philo_ptr);
 int			get_death_flag(t_data *data_ptr);
 int			get_rounds_eaten(t_philo *philo_ptr);

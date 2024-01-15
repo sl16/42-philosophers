@@ -6,7 +6,7 @@
 #    By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/24 09:14:33 by vbartos           #+#    #+#              #
-#    Updated: 2023/11/16 16:05:24 by vbartos          ###   ########.fr        #
+#    Updated: 2024/01/15 10:30:58 by vbartos          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,6 @@ SRC_PATH		= src/
 SRC				= init.c\
 					threads.c\
 					getters.c\
-					getters2.c\
 					setters.c\
 					utils.c\
 					utils2.c

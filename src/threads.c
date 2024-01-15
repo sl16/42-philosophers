@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 16:26:25 by vbartos           #+#    #+#             */
-/*   Updated: 2023/11/17 23:42:23 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:28:41 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,7 @@ int	ft_threads(t_data *data)
 	i = -1;
 	printf("[TIMESTAMP] \t [PHILOSOPHER] \t [STATUS]\n");
 	while (++i < data->philos_total)
-	{
-		if (pthread_create(&data->threads[i], NULL,
-				&ft_philosopher, &data->philos[i]))
-			ft_exit_error("Failed to create thread.", data);
-		ft_usleep(1);
-	}
+		ft_generate_thread(data, i);
 	i = -1;
 	while (++i < data->philos_total)
 	{
