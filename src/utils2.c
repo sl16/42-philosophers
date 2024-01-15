@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:02:52 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/15 10:30:26 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:43:36 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,4 @@ void	ft_generate_thread(t_data *data, int i)
 	if (pthread_create(&data->threads[i], NULL,
 			&ft_philosopher, &data->philos[i]))
 		ft_exit_error("Failed to create thread.", data);
-	ft_usleep(1);
 }
