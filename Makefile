@@ -6,7 +6,7 @@
 #    By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/24 09:14:33 by vbartos           #+#    #+#              #
-#    Updated: 2024/01/15 10:46:49 by vbartos          ###   ########.fr        #
+#    Updated: 2024/01/17 22:24:03 by vbartos          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ NAME			= philo
 
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g
-#CFLAGS			+= -fsanitize=thread -g
+# CFLAGS			+= -fsanitize=thread -g
 RM				= rm -rf
 
 # SOURCE FILES ----------------------------- #
@@ -32,6 +32,7 @@ RM				= rm -rf
 SRC_PATH		= src/
 SRC				= init.c\
 					threads.c\
+					routine_one.c\
 					getters.c\
 					setters.c\
 					utils.c\

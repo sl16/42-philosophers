@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 15:40:28 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/15 10:27:58 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/17 22:22:55 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_data
 	pthread_mutex_t	access_data;
 	pthread_mutex_t	access_death_flag;
 	pthread_mutex_t	access_philos_finished;
+	pthread_mutex_t	create_thread_mutex;
 	int				philos_total;
 	int				rounds_total;
 	int				philos_finished;	
@@ -67,18 +68,17 @@ int			ft_init_forks(t_data *data);
 
 int			ft_threads(t_data *data);
 void		ft_generate_thread(t_data *data, int i);
+void		ft_generate_checker(t_philo *philo);
 void		*ft_philosopher(void *philo_ptr);
-void		ft_routine(t_philo *philo);
+void		ft_eat(t_philo *philo);
 void		*ft_philo_check(void *philo_ptr);
 void		*ft_round_check(void *data_ptr);
 int			ft_only_one(t_data *data);
 void		ft_routine_only_one(t_philo *philo);
 int			get_eating_flag(t_philo *philo_ptr);
 int			get_death_flag(t_data *data_ptr);
-int			get_rounds_eaten(t_philo *philo_ptr);
 int			get_philos_finished(t_data *data_ptr);
-uint64_t	get_death_timer(t_philo *philo_ptr);
-uint64_t	get_time_of_start(t_data *data_ptr);
+pthread_t	*get_thread(t_data *data_ptr, int i);
 
 void		set_death_flag(t_data *data_ptr);
 void		set_eating_flag_on(t_philo *philo_ptr);

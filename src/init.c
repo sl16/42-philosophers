@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 14:19:01 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/15 10:32:39 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/17 22:14:17 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ft_init_data(t_data *data, int argc, char **argv)
 	pthread_mutex_init(&data->access_data, NULL);
 	pthread_mutex_init(&data->access_death_flag, NULL);
 	pthread_mutex_init(&data->access_philos_finished, NULL);
+	pthread_mutex_init(&data->create_thread_mutex, NULL);
 	return (0);
 }
 

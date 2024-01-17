@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 16:26:25 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/15 10:28:41 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/17 22:22:37 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void	*ft_philo_check(void *philo_ptr)
 	return (NULL);
 }
 
-// ft_routine
+// ft_eat
 // - odd philos pick left fork first, even ones pick right (prevents deadlock);
 // - eats, sleeps, thinks;
-void	ft_routine(t_philo *philo)
+void	ft_eat(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 		pthread_mutex_lock(philo->fork_right);
@@ -101,15 +101,13 @@ void	*ft_philosopher(void *philo_ptr)
 
 	philo = (t_philo *) philo_ptr;
 	philo->death_timer = philo->data->time_to_die + ft_save_time();
-	if (pthread_create(&philo->philo_checker, NULL,
-			&ft_philo_check, (void *)philo))
-		ft_exit_error("Failed to create philo checking thread.", philo->data);
+	ft_generate_checker(philo);
 	while (get_death_flag(philo->data) != 1)
 	{
 		if (philo->data->philos_total == 1)
 			ft_routine_only_one(philo);
 		else
-			ft_routine(philo);
+			ft_eat(philo);
 		if (get_death_flag(philo->data) != 1)
 		{
 			ft_print_status(philo, SLEEPING);
@@ -150,7 +148,7 @@ int	ft_threads(t_data *data)
 	if (data->rounds_total != -1)
 	{
 		if (pthread_join(data->round_checker, NULL))
-			ft_exit_error("Failed to join main checker thread.", data);
+			ft_exit_error("Failed to join round checking thread.", data);
 	}
 	return (0);
 }
