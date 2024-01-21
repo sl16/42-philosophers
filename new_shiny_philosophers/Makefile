@@ -6,7 +6,7 @@
 #    By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/24 09:14:33 by vbartos           #+#    #+#              #
-#    Updated: 2024/01/17 22:24:03 by vbartos          ###   ########.fr        #
+#    Updated: 2024/01/21 20:13:48 by vbartos          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,8 @@ RM				= rm -rf
 # SOURCE FILES ----------------------------- #
 
 SRC_PATH		= src/
-SRC				= init.c\
-					threads.c\
-					routine_one.c\
-					getters.c\
-					setters.c\
-					utils.c\
-					utils2.c
+SRC				= main.c\
+					init.c
 SRCS			= $(addprefix $(SRC_PATH), $(SRC))
 
 #SRCS_BONUS		= 
