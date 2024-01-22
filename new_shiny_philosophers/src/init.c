@@ -6,112 +6,96 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 14:19:01 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 00:42:06 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/22 19:51:52 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-/**
- * Initializes the data structure with the provided arguments.
- * 
- * @param data The pointer to the data structure to be initialized.
- * @param argc The number of command-line arguments.
- * @param argv The array of command-line arguments.
- */
+
 void	init_struct_data(t_data *data, int argc, char **argv)
 {
 	data->philos_total = ft_atoi(argv[1]);
+	data->time_to_die = (uint64_t) ft_atoi(argv[2]);
+	data->time_to_eat = (uint64_t) ft_atoi(argv[3]);
+	data->time_to_sleep = (uint64_t) ft_atoi(argv[4]);
 	if (argc == 6)
 		data->rounds_total = ft_atoi(argv[5]);
 	else
 		data->rounds_total = -1;
 	data->death_flag = 0;
-	data->time_to_die = (uint64_t) ft_atoi(argv[2]);
-	data->time_to_eat = (uint64_t) ft_atoi(argv[3]);
-	data->time_to_sleep = (uint64_t) ft_atoi(argv[4]);
-	data->philos = malloc(sizeof(t_philo) * data->philos_total);
-	if (!(data->philos))
-		ft_exit_error("Failed to allocate memory for 'philos'.", data);
-	data->threads = malloc(sizeof(pthread_t) * data->philos_total);
-	if (!(data->threads))
-		ft_exit_error("Failed to allocate memory for 'threads'.", data);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->philos_total);
-	if (!(data->forks))
+	if (pthread_mutex_init(&data->lock_print, NULL) != 0)
+			ft_exit_error("Failed to initiate the 'lock_print' mutex.", data);
+	if (pthread_mutex_init(&data->lock_end, NULL) != 0)
+			ft_exit_error("Failed to initiate the 'lock_end' mutex.", data);
+}
+
+t_philo	**init_struct_philos(t_data *data)
+{
+	t_philo	**philos;
+	int		i;
+
+	philos = malloc(sizeof(t_philo) * data->philos_total);
+	if (!philos)
+		ft_exit_error("Failed to allocate memory for 'philos array'.", data);
+	i = 0;
+	while (i < data->philos_total)
+	{
+		philos[i] = malloc(sizeof(t_philo));
+		if (!philos[i])
+			ft_exit_error("Failed to allocate memory for 'philo'.", data);
+		if (pthread_mutex_init(&philos[i]->lock_eating, NULL) != 0)
+			ft_exit_error("Failed to initiate a 'lock_eating' mutex.", data);
+		philos[i]->data = data;
+		philos[i]->id = i;
+		philos[i]->rounds_eaten = 0;
+		place_forks(philos[i]);
+		i++;
+	}
+	return (philos);
+}
+
+void	place_forks(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+	{
+		philo->fork[0] = philo->id;
+		philo->fork[1] = (philo->id + 1) % philo->data->philos_total;
+	}
+	else if (philo->id % 2 == 1)
+	{
+		philo->fork[0] = (philo->id + 1) % philo->data->philos_total;
+		philo->fork[1] = philo->id;
+	}
+}
+
+pthread_mutex_t	*init_forks(t_data *data)
+{
+	pthread_mutex_t	*forks;
+	int				i;
+
+	forks = malloc (sizeof(pthread_mutex_t) * data->philos_total);
+	if (!forks)
 		ft_exit_error("Failed to allocate memory for 'forks'.", data);
-	pthread_mutex_init(&data->lock_end, NULL);
-	pthread_mutex_init(&data->lock_print, NULL);
-}
-
-/**
- * Initializes the data structure for the philosophers.
- * 
- * @param data The pointer to the data structure.
- */
-void	init_struct_philos(t_data *data)
-{
-	int	i;
-
 	i = 0;
 	while (i < data->philos_total)
 	{
-		data->philos[i].data = data;
-		data->philos[i].id = i + 1;
-		data->philos[i].rounds_eaten = 0;
-		data->philos[i].death_timer = data->time_to_die;
-		pthread_mutex_init(&data->philos[i].lock_eating, NULL);
+		if (pthread_mutex_init(&forks[i], NULL) != 0)
+			ft_exit_error("Failed to initiate a 'fork' mutex.", data);
 		i++;
 	}
+	return (forks);
 }
 
-/**
- * Initializes the forks for the philosophers.
- * 
- * This function initializes the mutex locks for the forks used by
- * the philosophers. It iterates over the total number of philosophers and
- * initializes a mutex lock for each fork. It also assigns the left and
- * right forks to each philosopher.
- * 
- * @param data A pointer to the data structure containing the philosophers
- * and forks.
- */
-void init_forks(t_data *data)
+t_data	*init_data(int argc, char **argv)
 {
-	int	i;
+	t_data	*data;
 
-	i = 0;
-	while (i < data->philos_total)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-	i = 1;
-	while (i < data->philos_total)
-	{
-		data->philos[i].fork_left = &data->forks[i];
-		data->philos[i].fork_right = &data->forks[i - 1];
-		i++;
-	}
-	data->philos[0].fork_left = &data->forks[0];
-	data->philos[0].fork_right = &data->forks[data->philos_total - 1];
-}
-
-/**
- * @brief Initializes the data structure and sets up the program.
- * 
- * This function initializes the t_data structure with the provided command line arguments.
- * It also initializes the t_philo structures and the forks for the
- * philosophers.
- * 
- * @param data A pointer to the t_data structure.
- * @param argc The number of command line arguments.
- * @param argv An array of strings containing the command line arguments.
- * @return 0 on success.
- */
-int	init(t_data *data, int argc, char **argv)
-{
+	data = malloc (sizeof(t_data));
+	if (!data)
+		ft_exit_error("Failed to allocate memory for 'data'.", NULL);
 	init_struct_data(data, argc, argv);
-	init_struct_philos(data);
-	init_forks(data);
-	return (0);
+	data->philos = init_struct_philos(data);
+	data->locks_forks = init_forks(data);
+	return (data);
 }

@@ -6,7 +6,7 @@
 #    By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/24 09:14:33 by vbartos           #+#    #+#              #
-#    Updated: 2024/01/21 20:13:48 by vbartos          ###   ########.fr        #
+#    Updated: 2024/01/22 18:05:33 by vbartos          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,14 @@ RM				= rm -rf
 
 SRC_PATH		= src/
 SRC				= main.c\
-					init.c
+					check_input.c\
+					init.c\
+					routine_philo.c\
+					routine_watcher.c\
+					getters_setters.c\
+					utils.c\
+					exit.c
+					
 SRCS			= $(addprefix $(SRC_PATH), $(SRC))
 
 #SRCS_BONUS		= 

@@ -6,14 +6,12 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 23:44:17 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 00:46:31 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/22 19:56:41 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-// ft_atoi
-// - converts string to integers (helps with parsing arguments);
 int	ft_atoi(const char *nptr)
 {
 	int		sign;
@@ -35,7 +33,7 @@ int	ft_atoi(const char *nptr)
 		num = num * 10 + (nptr[i] - '0');
 		i++;
 	}
-	if (i > INT8_MAX)
+	if (i > INT32_MAX)
 		return (-1);
 	return (sign * (int)num);
 }
@@ -51,8 +49,6 @@ uint64_t	ft_save_time(void)
 	return (timestamp);
 }
 
-// ft_usleep
-// - mimics system call usleep, but is more precise;
 int	ft_usleep(uint64_t time)
 {
 	uint64_t	start;
@@ -63,15 +59,27 @@ int	ft_usleep(uint64_t time)
 	return (0);
 }
 
-// ft_print_status
-// - prints the current status of philosopher;
 int	ft_print_status(t_philo	*philo, char *status)
 {
 	uint64_t	curr_time;
 
+	pthread_mutex_lock(&philo->data->lock_print);
+	if (get_death_flag(philo->data) == 1 && status[0] != 'd')
+	{
+		pthread_mutex_unlock(&philo->data->lock_print);
+		return (0);
+	}
 	curr_time = ft_save_time() - philo->data->time_of_start;
-	pthread_mutex_lock(&philo->data->time_log);
+	if (status[0] == 'd')
+		ft_usleep(10);
+	
 	printf("%lu \t\t %d \t\t %s\n", curr_time, philo->id, status);
-	pthread_mutex_unlock(&philo->data->time_log);
+	pthread_mutex_unlock(&philo->data->lock_print);
 	return (0);
+}
+
+void	synchronize_start(uint64_t time_of_start)
+{
+	while (ft_save_time() < time_of_start)
+		continue ;
 }
