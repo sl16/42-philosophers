@@ -6,7 +6,7 @@
 #    By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/24 09:14:33 by vbartos           #+#    #+#              #
-#    Updated: 2024/01/22 20:44:55 by vbartos          ###   ########.fr        #
+#    Updated: 2024/01/22 22:28:12 by vbartos          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ NAME			= philo
 
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g
-CFLAGS			+= -fsanitize=thread -g
+# CFLAGS			+= -fsanitize=thread -g
 RM				= rm -rf
 
 # SOURCE FILES ----------------------------- #

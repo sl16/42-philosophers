@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 00:46:36 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 20:02:25 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/22 20:39:03 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	action_sleep(t_philo *philo, int64_t philo_sleep_time)
 	{
 		if (get_death_flag(philo->data) == 1)
 			break ;
-		ft_usleep(10);
+		ft_usleep(100);
 	}
 }
 
@@ -37,13 +37,13 @@ void	action_think(t_philo *philo, int visibility)
 	pthread_mutex_unlock(&philo->lock_eating);
 	if (time_to_think < 0)
 		time_to_think = 0;
-	if (time_to_think == 00 && visibility == 1)
+	if (time_to_think == 00 && visibility == 0)
 		time_to_think = 1;
 	if (time_to_think > 600)
 		time_to_think = 200;
-	if (visibility == 0)
+	if (visibility == 1)
 		ft_print_status(philo, THINK);
-	ft_usleep(time_to_think);
+	action_sleep(philo, time_to_think);
 
 	// (void) philo;
 	// (void) visibility;
@@ -56,11 +56,11 @@ void	action_eat(t_philo *philo)
 	ft_print_status(philo, FORK_EQUIP);
 	pthread_mutex_lock(&philo->data->locks_forks[philo->fork[1]]);
 	ft_print_status(philo, FORK_EQUIP);
+	ft_print_status(philo, EAT);
 	pthread_mutex_lock(&philo->lock_eating);
 	philo->last_meal = ft_save_time();
-	ft_print_status(philo, EAT);
-	ft_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(&philo->lock_eating);
+	action_sleep(philo, philo->data->time_to_eat);
 	if (get_death_flag(philo->data) != 1)
 	{
 		pthread_mutex_lock(&philo->lock_eating);
@@ -92,15 +92,15 @@ void	*routine_philo(void *philo_ptr)
 	synchronize_start(philo->data->time_of_start);
 	if (philo->data->philos_total == 1)
 		return (routine_one(philo));
-	if (philo->id % 2)
-		action_think(philo, 1);
+	if (philo->id % 2)                				//HERE??
+		action_think(philo, 0);
 	while(get_death_flag(philo->data) != 1)
 	{
 		action_eat(philo);
 		if (get_death_flag(philo->data) != 1)
 			action_sleep(philo, philo->data->time_to_sleep);
 		if (get_death_flag(philo->data) != 1)
-			action_think(philo, 0);
+			action_think(philo, 1);
 	}
 	return (NULL);
 }

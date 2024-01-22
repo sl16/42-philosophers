@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 15:40:28 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 20:06:08 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/22 22:37:12 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ typedef struct s_philo
 	pthread_t		thread;
 	int				id;
 	int				rounds_eaten;
-	int				fork[2];
+	pthread_mutex_t *fork_left;
+	pthread_mutex_t *fork_right;
+	int				eating_flag;
+	pthread_mutex_t	lock_philo;
 	pthread_mutex_t	lock_eating;
 	uint64_t		last_meal;
 }			t_philo;
@@ -63,7 +66,7 @@ t_data		*init_data(int argc, char **argv);
 void		init_struct_data(t_data *data, int argc, char **argv);
 t_philo		**init_struct_philos(t_data *data);
 pthread_mutex_t	*init_forks(t_data *data);
-void		place_forks(t_philo *philo);
+void		place_forks(t_data *data);
 
 int			simulation_start(t_data *data);
 int 		simulation_end(t_data *data);
@@ -80,6 +83,8 @@ int			philo_died(t_philo *philo);
 
 int			get_death_flag(t_data *data);
 void		set_death_flag(t_data *data);
+int			get_eating_flag(t_philo *philo);
+void		set_eating_flag(t_philo *philo, int flag);
 
 int			ft_atoi(const char *nptr);
 uint64_t	ft_save_time(void);
