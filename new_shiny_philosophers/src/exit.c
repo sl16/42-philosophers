@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 23:30:09 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/23 02:08:10 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 15:57:03 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,14 @@ int	free_mutexes(t_data *data)
 	{
 		while (i < data->philos_total)
 		{
-			if (&data->locks_forks[i])
-				pthread_mutex_destroy(&data->locks_forks[i]);
-			if (&data->philos[i]->lock_philo)
-				pthread_mutex_destroy(&data->philos[i]->lock_eating);
-			if (&data->philos[i]->lock_eating)
-				pthread_mutex_destroy(&data->philos[i]->lock_philo);
+			pthread_mutex_destroy(&data->locks_forks[i]);
+			pthread_mutex_destroy(&data->philos[i]->lock_eating);
+			pthread_mutex_destroy(&data->philos[i]->lock_philo);
 			i++;
 		}
 	}
-	if (&data->lock_end)
-		pthread_mutex_destroy(&data->lock_end);
-	if (&data->lock_print)
-		pthread_mutex_destroy(&data->lock_print);
+	pthread_mutex_destroy(&data->lock_end);
+	pthread_mutex_destroy(&data->lock_print);
 	return (0);
 }
 
