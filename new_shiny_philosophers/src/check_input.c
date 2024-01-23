@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:16:03 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 00:33:35 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 02:05:49 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  *
  * @param argc The number of command-line arguments.
  */
-void check_args(int argc)
+void	check_args(int argc)
 {
 	if (argc < 5 || argc > 6)
 		ft_exit_error("Use 4 arguments (5th optional).", NULL);
@@ -37,9 +37,11 @@ void check_args(int argc)
  *
  * @param arg The command-line argument to be checked.
  */
-void check_format(char *arg)
+void	check_format(char *arg)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (arg[i] != '\0')
 	{
 		if (arg[i] < '0' || arg[i] > '9')
@@ -58,9 +60,11 @@ void check_format(char *arg)
  *
  * @param arg The command-line argument to be checked.
  */
-void check_intmax(char *arg)
+void	check_intmax(char *arg)
 {
-	int num = ft_atoi(arg);
+	int	num;
+
+	num = ft_atoi(arg);
 	if (num < 0)
 		ft_exit_error("Provide positive values in INT_MAX range only.", NULL);
 }
@@ -75,7 +79,7 @@ void check_intmax(char *arg)
  * @param arg The command-line argument to be checked.
  * @param i The index of the command-line argument.
  */
-void check_values(char *arg, int i)
+void	check_values(char *arg, int i)
 {
 	if (i == 1)
 	{
@@ -84,8 +88,8 @@ void check_values(char *arg, int i)
 	}
 	else if (i == 2 || i == 3 || i == 4)
 	{
-		if (ft_atoi(arg) < 1)
-			ft_exit_error("The time values must be at least 1 ms.", NULL);
+		if (ft_atoi(arg) < 60)
+			ft_exit_error("The time values must be at least 60 ms.", NULL);
 	}
 	else if (i == 5)
 	{
@@ -106,10 +110,12 @@ void check_values(char *arg, int i)
  * @param argv The array of command-line arguments.
  * @return 0 if all arguments pass the checks, otherwise exits the program.
  */
-int check_input(int argc, char **argv)
+int	check_input(int argc, char **argv)
 {
+	int	i;
+
 	check_args(argc);
-	int i = 1;
+	i = 1;
 	while (argv[i] != NULL)
 	{
 		check_format(argv[i]);
@@ -117,5 +123,5 @@ int check_input(int argc, char **argv)
 		check_values(argv[i], i);
 		i++;
 	}
-	return 0;
+	return (0);
 }

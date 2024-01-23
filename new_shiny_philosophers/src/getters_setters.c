@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:42:58 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 11:12:26 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 02:06:33 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,21 @@ void	set_death_flag(t_data *data)
 	pthread_mutex_lock(&data->lock_end);
 	data->death_flag = 1;
 	pthread_mutex_unlock(&data->lock_end);
+}
+
+int	get_eating_flag(t_philo *philo)
+{
+	int	res;
+
+	pthread_mutex_lock(&philo->lock_eating);
+	res = philo->eating_flag;
+	pthread_mutex_unlock(&philo->lock_eating);
+	return (res);
+}
+
+void	set_eating_flag(t_philo *philo, int flag)
+{
+	pthread_mutex_lock(&philo->lock_eating);
+	philo->data->death_flag = flag;
+	pthread_mutex_unlock(&philo->lock_eating);
 }

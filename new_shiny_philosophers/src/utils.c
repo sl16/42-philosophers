@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 23:44:17 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 20:43:41 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 02:07:06 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_atoi(const char *nptr)
 {
-	int		sign;
-	int		i;
-	unsigned long long int		num;
+	int						sign;
+	int						i;
+	unsigned long long int	num;
 
 	i = 0;
 	num = 0;
@@ -43,9 +43,8 @@ uint64_t	ft_save_time(void)
 	struct timeval	tv;
 	uint64_t		timestamp;
 
-	if (gettimeofday(&tv, NULL))
-		ft_exit_error("Couldn't save current time.", NULL);
-	timestamp = tv.tv_sec * 1000 + (tv.tv_usec / 1000);
+	gettimeofday(&tv, NULL);
+	timestamp = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	return (timestamp);
 }
 
@@ -55,7 +54,7 @@ int	ft_usleep(uint64_t time)
 
 	start = ft_save_time();
 	while ((ft_save_time() - start) < time)
-		usleep(time / 10);
+		usleep(1);
 	return (0);
 }
 
@@ -72,8 +71,7 @@ int	ft_print_status(t_philo	*philo, char *status)
 	curr_time = ft_save_time() - philo->data->time_of_start;
 	if (status[0] == 'd')
 		ft_usleep(10);
-	
-	printf("%lu \t\t %d \t\t %s\n", curr_time, philo->id, status);
+	printf("%lu \t\t %d \t\t %s\n", curr_time, philo->id + 1, status);
 	pthread_mutex_unlock(&philo->data->lock_print);
 	return (0);
 }

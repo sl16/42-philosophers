@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:14:05 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/22 15:59:21 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 02:21:08 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int	simulation_start(t_data *data)
 		if (pthread_create(&data->philos[i]->thread, NULL,
 				&routine_philo, data->philos[i]))
 			ft_exit_error("Failed to create a philo thread.", data);
+		pthread_mutex_lock(&data->philos[i]->lock_philo);
+		data->philos[i]->last_meal = data->time_of_start;
+		pthread_mutex_unlock(&data->philos[i]->lock_philo);
 		i++;
 	}
 	if (data->philos_total > 1)
@@ -35,7 +38,7 @@ int	simulation_start(t_data *data)
 	return (0);
 }
 
-int simulation_end(t_data *data)
+int	simulation_end(t_data *data)
 {
 	int	i;
 
