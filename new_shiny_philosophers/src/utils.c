@@ -6,7 +6,7 @@
 /*   By: vbartos <vbartos@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 23:44:17 by vbartos           #+#    #+#             */
-/*   Updated: 2024/01/23 02:07:06 by vbartos          ###   ########.fr       */
+/*   Updated: 2024/01/23 16:04:56 by vbartos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_atoi(const char *nptr)
 		num = num * 10 + (nptr[i] - '0');
 		i++;
 	}
-	if (i > INT32_MAX)
+	if (num > INT32_MAX)
 		return (-1);
 	return (sign * (int)num);
 }
